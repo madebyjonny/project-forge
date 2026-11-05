@@ -13,7 +13,8 @@ Every command works two ways:
 ## Install
 
 ```bash
-make install            # builds and copies to /usr/local/bin/forge (PREFIX=... to change)
+make install            # builds and copies to ~/.local/bin/forge (no sudo)
+sudo make install PREFIX=/usr/local   # system-wide instead
 # or
 make install-go         # go install → ~/go/bin/forge
 ```
