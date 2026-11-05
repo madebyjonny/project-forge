@@ -4,7 +4,6 @@ An artisan-style CLI for building Bun backends the Laravel way — one global
 binary that scaffolds and manages a **Bun · Hono · Drizzle · Zod** stack, with
 optional **Better Auth + CASL**, an **OAuth-secured MCP server** for AI clients,
 **WebSockets**, **BullMQ queues** and **Docker**
-(the stack from [the field manual](./node-bun-backend-2026%20(1).html)).
 
 Every command works two ways:
 
