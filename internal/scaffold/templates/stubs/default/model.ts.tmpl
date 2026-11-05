@@ -1,0 +1,16 @@
+import { model } from "../../core/model";
+import { t, table } from "../../core/schema";
+{{- range .Imports}}
+{{.}}
+{{- end}}
+
+export const {{.Var}} = table("{{.Table}}", {
+  id: t.id(),
+{{- range .Columns}}
+  {{.}},
+{{- end}}
+  ...t.timestamps(),
+});
+
+export const {{.Name}} = model("{{.Name}}", {{.Var}});
+export type {{.Name}} = typeof {{.Var}}.$inferSelect;

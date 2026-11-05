@@ -1,0 +1,31 @@
+import { describe, expect, it } from "bun:test";
+import { app } from "~/bootstrap/app";
+
+describe("{{.Path}}", () => {
+  it("lists {{.Plural}}", async () => {
+    const res = await app.request("{{.Path}}");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toHaveProperty("data");
+  });
+{{- if .Policies}}
+
+  it("requires auth to create", async () => {
+    const res = await app.request("{{.Path}}", {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: "http://localhost:3000" },
+      body: "{}",
+    });
+    expect(res.status).toBe(403);
+  });
+{{- else}}
+
+  it("validates input", async () => {
+    const res = await app.request("{{.Path}}", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{}",
+    });
+    expect(res.status).toBe(422);
+  });
+{{- end}}
+});

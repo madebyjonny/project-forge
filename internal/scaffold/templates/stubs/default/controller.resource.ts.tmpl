@@ -1,0 +1,47 @@
+import { controller, pageParams, validate{{if .Owned}}, userOrFail{{end}} } from "~/core/http";
+{{- if .Policies}}
+import { authorize } from "~/core/policy";
+{{- end}}
+import { {{.Name}} } from "~/app/models/{{.File}}";
+import { {{.Name}}Request } from "~/app/validators/{{.File}}";
+
+export default controller({
+  async index(c) {
+    const { page, perPage } = pageParams(c);
+    return c.json(await {{.Name}}.paginate(page, perPage));
+  },
+
+  async show(c) {
+    const {{.Camel}} = await {{.Name}}.findOrFail(c.req.param("id")!);
+{{- if .Policies}}
+    authorize(c, "read", {{.Camel}});
+{{- end}}
+    return c.json({{.Camel}});
+  },
+
+  async store(c) {
+{{- if .Policies}}
+    authorize(c, "create", "{{.Name}}");
+{{- end}}
+    const data = await validate(c, {{.Name}}Request);
+    return c.json(await {{.Name}}.create({{if .Owned}}{ ...data, userId: userOrFail(c).id }{{else}}data{{end}}), 201);
+  },
+
+  async update(c) {
+    const {{.Camel}} = await {{.Name}}.findOrFail(c.req.param("id")!);
+{{- if .Policies}}
+    authorize(c, "update", {{.Camel}});
+{{- end}}
+    const data = await validate(c, {{.Name}}Request.partial());
+    return c.json(await {{.Name}}.update({{.Camel}}.id, data));
+  },
+
+  async destroy(c) {
+    const {{.Camel}} = await {{.Name}}.findOrFail(c.req.param("id")!);
+{{- if .Policies}}
+    authorize(c, "delete", {{.Camel}});
+{{- end}}
+    await {{.Name}}.delete({{.Camel}}.id);
+    return c.body(null, 204);
+  },
+});

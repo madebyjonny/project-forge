@@ -1,0 +1,14 @@
+import { policy } from "~/core/policy";
+
+// Who can do what with a {{.Name}}. Conditions are checked against the actual record.
+export default policy((user, { can }) => {
+  can("read", "{{.Name}}");
+  if (!user) return;
+
+  can("create", "{{.Name}}");
+{{- if .Owned}}
+  can(["update", "delete"], "{{.Name}}", { userId: user.id });
+{{- else}}
+  can(["update", "delete"], "{{.Name}}");
+{{- end}}
+});

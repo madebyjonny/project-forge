@@ -1,0 +1,9 @@
+import { describe, expect, it } from "bun:test";
+import { app } from "~/bootstrap/app";
+
+describe("{{.Name}}", () => {
+  it("works", async () => {
+    const res = await app.request("/");
+    expect(res.status).toBe(200);
+  });
+});

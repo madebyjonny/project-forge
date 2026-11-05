@@ -1,0 +1,5 @@
+import { controller } from "~/core/http";
+
+export default controller({
+  index: (c) => c.json({ message: "{{.Name}}Controller@index" }),
+});

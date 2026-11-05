@@ -1,0 +1,17 @@
+import { z } from "zod";
+import { tool } from "~/core/mcp";
+
+// Runs as the connected user: use ctx.user, ctx.can() and ctx.authorize() like a controller.
+export default tool(
+  "{{.Tool}}",
+  {
+    description: "Describe what {{.Tool}} does so the AI knows when to call it.",
+    input: {
+      // name: z.string().describe("Who to greet"),
+    },
+    readOnly: true,
+  },
+  async (input, { user }) => {
+    return { ok: true, user: user.email };
+  },
+);

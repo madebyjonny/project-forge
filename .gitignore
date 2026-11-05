@@ -1,0 +1,41 @@
+# Build output
+#/bin/
+/dist/
+/forge
+*.exe
+*.test
+!.env.test
+*.out
+
+# Go tooling
+/vendor/
+/go.work
+/go.work.sum
+coverage.*
+*.coverprofile
+
+# Local env/secrets (root only — template files like .env.test under
+# internal/scaffold/templates are embedded into the binary and must stay tracked)
+/.env
+/.env.*
+
+# Scratch projects generated while testing the CLI
+/tmp/
+/scratch/
+node_modules/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Tool artifacts
+.playwright-mcp/
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+*.swp
+*~
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

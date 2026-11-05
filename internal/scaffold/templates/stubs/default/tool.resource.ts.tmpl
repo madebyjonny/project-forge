@@ -1,0 +1,42 @@
+import { z } from "zod";
+import { tool } from "~/core/mcp";
+import { {{.Name}} } from "~/app/models/{{.File}}";
+import { {{.Name}}Request } from "~/app/validators/{{.File}}";
+
+// CRUD tools for {{.Name}}. Every call runs as the connected user and goes through the {{.Name}} policy.
+export default [
+  tool(
+    "list_{{.TablePlural}}",
+    { description: "List {{.PluralWords}}, 20 per page.", readOnly: true, input: { page: z.number().int().min(1).default(1) } },
+    async ({ page }, { authorize }) => {
+      authorize("read", "{{.Name}}");
+      return {{.Name}}.paginate(page, 20);
+    },
+  ),
+
+  tool("get_{{.TableSingular}}", { description: "Get one {{.Camel}} by id.", readOnly: true, input: { id: z.string() } }, async ({ id }, { authorize }) => {
+    const {{.Camel}} = await {{.Name}}.findOrFail(id);
+    authorize("read", {{.Camel}});
+    return {{.Camel}};
+  }),
+
+  tool("create_{{.TableSingular}}", { description: "Create a {{.Camel}}.", input: {{.Name}}Request.shape }, async (input, { authorize{{if .Owned}}, user{{end}} }) => {
+    authorize("create", "{{.Name}}");
+    return {{.Name}}.create({{if .Owned}}{ ...input, userId: user.id }{{else}}input{{end}});
+  }),
+
+  tool(
+    "update_{{.TableSingular}}",
+    { description: "Update a {{.Camel}}. Only send the fields to change.", input: { id: z.string(), ...{{.Name}}Request.partial().shape } },
+    async ({ id, ...data }, { authorize }) => {
+      authorize("update", await {{.Name}}.findOrFail(id));
+      return {{.Name}}.update(id, data);
+    },
+  ),
+
+  tool("delete_{{.TableSingular}}", { description: "Delete a {{.Camel}}.", destructive: true, input: { id: z.string() } }, async ({ id }, { authorize }) => {
+    authorize("delete", await {{.Name}}.findOrFail(id));
+    await {{.Name}}.delete(id);
+    return `Deleted {{.Camel}} ${id}`;
+  }),
+];

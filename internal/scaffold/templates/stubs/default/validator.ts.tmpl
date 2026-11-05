@@ -1,0 +1,10 @@
+import { z } from "zod";
+
+// Validation rules (≈ a Form Request). The inferred type flows into your controller.
+export const {{.Name}}Request = z.object({
+{{- range .Rules}}
+  {{.}},
+{{- end}}
+});
+
+export type {{.Name}}Input = z.infer<typeof {{.Name}}Request>;

@@ -1,0 +1,8 @@
+import { defineMiddleware } from "~/core/middleware";
+
+// Use in routes as "{{.Alias}}" (or "{{.Alias}}:arg1,arg2" — args arrive as the 3rd parameter).
+export default defineMiddleware(async (c, next, args) => {
+  // before the request...
+  await next();
+  // ...after the response
+});

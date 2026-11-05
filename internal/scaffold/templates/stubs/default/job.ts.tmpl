@@ -1,0 +1,10 @@
+import { job } from "~/core/queue";
+
+export interface {{.Name}}Data {
+  // payload fields
+}
+
+// Dispatch with: await dispatch({{.Name}}, { ... })
+export default job<{{.Name}}Data>("{{.Kebab}}", async (data) => {
+  // do the work
+}, { attempts: 3 });
